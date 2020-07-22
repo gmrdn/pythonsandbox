@@ -17,11 +17,18 @@ class Patient(object):
             for medicine in self._medicines:
                 if (medicine.name in medicine_names):
                     for presc in medicine.prescriptions:
-                        #only checking the prescription date for the moment 
-                        #todo : replace by date ranges
-                        if day_to_check == presc.dispense_date:
+                        prescription_date_list = []
+                        for x in range (0, presc.days_supply):
+                            prescription_date_list.append(presc.dispense_date + timedelta(days = x))
+                        
+                        if day_to_check in prescription_date_list:
                             took_that_day.append(medicine.name)
 
-            if took_that_day == medicine_names:
+            took_all_medicine_that_day = all(elem in took_that_day for elem in medicine_names)
+
+
+            
+
+            if took_all_medicine_that_day == True:
                 clash_days.append(day_to_check)
         return clash_days
