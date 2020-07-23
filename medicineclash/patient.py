@@ -26,9 +26,6 @@ class Patient(object):
 
             took_all_medicine_that_day = all(elem in took_that_day for elem in medicine_names)
 
-
-            
-
             if took_all_medicine_that_day == True:
                 clash_days.append(day_to_check)
         return clash_days

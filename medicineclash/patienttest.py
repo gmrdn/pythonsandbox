@@ -34,6 +34,28 @@ class PatientTest(unittest.TestCase):
         prescC = Prescription(date(2020, 7, 10), 10)
         patient = self.prepare_data(prescA, prescB, prescC)
         self.assertEqual(patient.clash(["A", "B"], 90), [date(2020, 7, 13), date(2020, 7, 12), date(2020, 7, 11), date(2020, 7, 10)])
+
+    @freeze_time("2020-07-20")
+    def test_clash_with_two_patients(self):
+        prescA = Prescription(date(2020, 7, 1), 20)
+        prescB = Prescription(date(2020, 7, 10), 4)
+        prescC = Prescription(date(2020, 7, 10), 10)
+        medA = Medicine("A")
+        medB = Medicine("B")
+        medC = Medicine("C")
+
+        medA.add_prescription(prescA)
+        medB.add_prescription(prescB)
+        medC.add_prescription(prescC)
+
+        patientA = Patient()
+        patientB = Patient()
+        patientA.add_medicine(medA)
+        patientB.add_medicine(medA)
+        patientB.add_medicine(medB)
+        patientA.add_medicine(medC)
+        patientB.add_medicine(medC)
+        self.assertEqual(patientA.clash(["A", "B"], 90), [])
                 
     @freeze_time("2020-07-20")
     def test_clash_when_medecines_in_history_any_order(self):
